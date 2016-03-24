@@ -44,16 +44,28 @@ class MongoReader(Reader):
         self.conn = pymongo.MongoClient(mongoURI)[dbName][collName]
         self.query = query
         self.limit = limit
+        self.fields = ['components', 'question', 'answers']
+        self.key_field = 'components'
+        self.return_fields = ['question', 'answers']
+
+    def get_value(self, value):
+        if isinstance(value, list):
+            return ' '.join(value)
+        else:
+            return str(value)
 
     def iterate(self):
         ''' Iterate through the source reader '''
-        cursor = self.conn.find(self.query, ['components', 'question', 'answers'])
+        cursor = self.conn.find(self.query, self.fields)
         if self.limit: 
             cursor = cursor.limit(self.limit)
         for doc in cursor:
             try:
-                texts = self.prepare_words("%s %s" % (doc.get('question'), ' '.join(doc.get('answers') )))   
-                yield doc.get('components'), texts
+                content = ""
+                for f in self.return_fields:
+                    content +=" %s" % (self.get_value(doc.get(f)))
+                texts = self.prepare_words(content)   
+                yield doc.get(self.key_field), texts
             except Exception, ex: 
                 raise Exception("Failed to prepare words: %s" % ex)
 

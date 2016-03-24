@@ -21,7 +21,10 @@ class LDAAnalyser(object):
         '''
         lda_model = models.LdaModel.load(model)
         self.lda_model = lda_model
+
         self.reader = reader
+        # Only analyse the question
+        self.reader.return_fields = ['question']
 
     def analyse(self):
         ''' analyse '''
@@ -33,7 +36,8 @@ class LDAAnalyser(object):
             content = wordsmatrix.doc2bow(doc[1])
             stats = list(sorted(self.lda_model[content], key=lambda x:x[1]))
             _logger.info("Most related %s", stats[-1])
-
+        return 
+        
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Given a model file classify a topic.")
