@@ -6,6 +6,8 @@ import logging
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem import WordNetLemmatizer
+from nltk.stem.porter import PorterStemmer
+
 
 logging.basicConfig(format='%(levelname)s : %(message)s', level=logging.INFO)
 logging.root.level = logging.INFO
@@ -17,6 +19,7 @@ class Reader(object):
         ''' init '''
         self.stop = set(stopwords.words('english'))
         self.tokenizer = RegexpTokenizer(r'\w+')
+        self.p_stemmer = PorterStemmer()
         self.wn_lemmatizer = WordNetLemmatizer()
 
     def prepare_words(self, text):
@@ -30,9 +33,10 @@ class Reader(object):
         texts = [t for t in texts if not t.isdigit()]
         # remove stopped words
         texts = [i for i in texts if not i in self.stop]
-        # remove stemmed 
+        # lemmatize 
         texts = [self.wn_lemmatizer.lemmatize(i) for i in texts]
-
+        # stemmed
+        texts = [self.p_stemmer.stem(i) for i in texts]  
         return texts
 
     def iterate(self):
