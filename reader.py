@@ -1,10 +1,15 @@
 #!/bin/env python
 
 import pymongo
+import logging
 
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
-from nltk.stem.porter import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+
+logging.basicConfig(format='%(levelname)s : %(message)s', level=logging.INFO)
+logging.root.level = logging.INFO
+_logger = logging.getLogger(__name__)
 
 class Reader(object):
     ''' Source reader object feeds other objects to iterate through a source. '''
@@ -12,19 +17,22 @@ class Reader(object):
         ''' init '''
         self.stop = set(stopwords.words('english'))
         self.tokenizer = RegexpTokenizer(r'\w+')
-        self.p_stemmer = PorterStemmer()
+        self.wn_lemmatizer = WordNetLemmatizer()
 
     def prepare_words(self, text):
         ''' Prepare text 
         '''
         # lower cased all text
         text = text.lower()
-        # tokenize into words
-        words = self.tokenizer.tokenize(text)
+        # tokenize
+        texts = self.tokenizer.tokenize(text)
+        # remove numbers
+        texts = [t for t in texts if not t.isdigit()]
         # remove stopped words
-        stopped_tokens = [i for i in words if not i in self.stop]
+        texts = [i for i in texts if not i in self.stop]
         # remove stemmed 
-        texts = [self.p_stemmer.stem(i) for i in stopped_tokens]       
+        texts = [self.wn_lemmatizer.lemmatize(i) for i in texts]
+
         return texts
 
     def iterate(self):
