@@ -34,14 +34,14 @@ class CustomCorpus(object):
 class BuildLDAModel(object):
     ''' Build LDA model file. 
     '''
-    def __init__(self, fileoutput, num_topics=30, num_passes=10, 
-                 num_min_docs=5, num_min_pct=30, num_topic_words=20):
+    def __init__(self, fileoutput, num_topics=40, num_passes=20, 
+                 num_min_docs=3, num_min_pct=20, num_topic_words=10):
         ''' init
             :param fileoutput: output model file 
             :param num_topics: number of topics to be generated
             :param num_passes: number of passes iteration to generate the model
-            :param num_min_docs: number of documents to ignore
-            :param num_min_pct: number of percentage of documents to ignore
+            :param num_min_docs: ignore words that appear in less than N docs 
+            :param num_min_pct: ignore words that appear more than N percent of documents
             :param num_words: number of words to show per topic
         '''
         self.fileoutput = fileoutput
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     parser.add_argument('--nobuild', help="Flag to skip building a model. Useful to just dumping topics", action="store_true", default=False)
     args = parser.parse_args()
 
-    if (not args.model) or (args.dumptopics and not args.model):
+    if (not args.model) or (args.topics and not args.model):
         parser.print_help()
         sys.exit(0)
 
@@ -119,7 +119,7 @@ if __name__ == "__main__":
                              dbName=args.db, collName=args.coll, limit=args.limit)
         builder.build(reader)
     
-    if args.dumptopics:
+    if args.topics:
         builder.dump_topics(topics_file=args.topics, model=args.model)
 
 
