@@ -19,7 +19,7 @@ class LDAAnalyser(object):
         ''' init 
             :param model: LDA model
             :param reader: source reader object
-            :param topicfile: lookup topic file.
+            :param topic_file: lookup topic file.
         '''
         lda_model = models.LdaModel.load(model)
         self.lda_model = lda_model
@@ -40,6 +40,7 @@ class LDAAnalyser(object):
 
         for doc in self.reader.iterate():
             # doc[1] is the texts, while doc[1] is the title.
+            _logger.info(doc[1])
             content = wordsmatrix.doc2bow(doc[1])
             stats = list(sorted(self.lda_model[content], key=lambda x:x[1]))
             most_related = stats[-1]
