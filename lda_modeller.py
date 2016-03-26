@@ -2,6 +2,7 @@
 
 import argparse
 import logging
+import json 
 
 from gensim import corpora
 from gensim import models
@@ -33,8 +34,8 @@ class CustomCorpus(object):
 class BuildLDAModel(object):
     ''' Build LDA model file. 
     '''
-    def __init__(self, fileoutput, num_topics=20, num_passes=10, 
-                 num_min_docs=5, num_min_pct=0.5, num_topic_words=15):
+    def __init__(self, fileoutput, num_topics=30, num_passes=10, 
+                 num_min_docs=5, num_min_pct=30, num_topic_words=20):
         ''' init
             :param fileoutput: output model file 
             :param num_topics: number of topics to be generated
@@ -78,15 +79,21 @@ class BuildLDAModel(object):
         if not self.lda_model:
             raise Exception("There is no model set to output topics. Run build() first.")
 
-        with open(topics_file, 'w') as tfile:
-            for topic in self.lda_model.show_topics(num_topics=self.num_topics, 
+        dump_dict = {}
+        for topic in self.lda_model.show_topics(num_topics=self.num_topics, 
                                                     num_words=self.num_topic_words):
-                tid,stats = topic
-                tfile.write("TopicId [%s]: ?? \n" % tid)
-                stats = stats.split(" + ")
-                for stat in stats:
-                    tfile.write("\t%s\n" % stat)
-                tfile.write("\n")
+            tid, stats = topic
+            dump_dict[tid] = {}
+            dump_dict[tid]['topic'] = "??"
+            dump_dict[tid]['stats'] = {}
+            stats = stats.split(" + ")
+            for stat in stats:
+                num,word = stat.split("*")
+                dump_dict[tid]['stats'][num] = word
+
+        with open(topics_file, 'w') as tfile:
+            json.dump(dump_dict, tfile, indent=4, sort_keys=True)
+
         return
 
 
@@ -97,9 +104,9 @@ if __name__ == "__main__":
     parser.add_argument('--coll', help="Specify MongoDB collection name. default:traning", default='training')
     parser.add_argument('--mongoURI', help="Specify MongoDB URI for different server/ports", default="mongodb://localhost:27017")
     parser.add_argument('--query', help="Specify a query to filter MongoDB. default:all", default={})
-    parser.add_argument('--limit', help="Specify the limit of records to read from source. default: None", default=None)
-    parser.add_argument('--dumptopics', help="Specify a file to print topics to")
-    parser.add_argument('--nobuild', help="Flag to skip building a model", action="store_true", default=False)
+    parser.add_argument('--limit', help="Specify the limit of records to read from source. default: None", type=int, default=None)
+    parser.add_argument('--topics', help="Specify a file to print topics to")
+    parser.add_argument('--nobuild', help="Flag to skip building a model. Useful to just dumping topics", action="store_true", default=False)
     args = parser.parse_args()
 
     if (not args.model) or (args.dumptopics and not args.model):
@@ -113,6 +120,6 @@ if __name__ == "__main__":
         builder.build(reader)
     
     if args.dumptopics:
-        builder.dump_topics(topics_file=args.dumptopics, model=args.model)
+        builder.dump_topics(topics_file=args.topics, model=args.model)
 
 
