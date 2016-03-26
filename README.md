@@ -12,21 +12,21 @@ Python libraries used:
 
 **Data**
 
-There is a class called `Reader` which read data and prepares the data for the modelling. By default, it will use a class called `MongoReader` which inherits from `Reader` and reads data from [MongoDB](http://mongodb.com). 
+There is a class called `Reader` which reads and prepares the data for the modelling. By default, it will use a class called `MongoReader` which inherits from `Reader` and reads data from [MongoDB](http://mongodb.com). 
 
 The document structure in MongoDB is structured like below:
 
 ```json
 {
     "question": "foo",
-    "components": [ "foo", "bar", ... ],
-    "questions": [ "foo", "bar", ... ]
+    "components": [ "foo", "bar", .. ],
+    "questions": [ "foo", "bar", .. ]
 }
 ```
 
 **Topics Modelling**
 
-To build a topics model, you can execute the `lda_modeller.py` file. 
+In order to build a topics model, you can execute the `lda_modeller.py` file. 
 
 Example usage: 
 
