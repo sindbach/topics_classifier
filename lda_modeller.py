@@ -1,4 +1,4 @@
-#!/bin/env python 
+#!/usr/bin/env python 
 
 import argparse
 import logging
@@ -100,7 +100,7 @@ class BuildLDAModel(object):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Build LDA model file.")
     parser.add_argument('--model', help="Specify output model file. default: lda.model", default="./lda.model")
-    parser.add_argument('--db', help="Specify MongoDB db name. default:bow", default='bow')
+    parser.add_argument('--db', help="Specify MongoDB db name. default:topicsDB", default='topicsDB')
     parser.add_argument('--coll', help="Specify MongoDB collection name. default:traning", default='training')
     parser.add_argument('--mongoURI', help="Specify MongoDB URI for different server/ports", default="mongodb://localhost:27017")
     parser.add_argument('--query', help="Specify a query to filter MongoDB. default:all", default={})

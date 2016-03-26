@@ -1,4 +1,4 @@
-#!/bin/env python 
+#!/usr/bin/env python 
 
 import argparse
 import logging
@@ -53,11 +53,11 @@ class LDAAnalyser(object):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Given a model file classify a topic.")
     parser.add_argument('--model', help="Specify input model file. default: lda.model", default="./lda.model")
-    parser.add_argument('--db', help="Specify MongoDB db name. default:bow", default='bow')
+    parser.add_argument('--db', help="Specify MongoDB db name. default:topicsDB", default='topicsDB')
     parser.add_argument('--coll', help="Specify MongoDB collection name. default:data", default='data')
     parser.add_argument('--mongoURI', help="Specify MongoDB URI for different server/ports", default="mongodb://localhost:27017")
     parser.add_argument('--query', help="Specify a query to filter MongoDB. default:all", default={})
-    parser.add_argument('--limit', help="Specify a number of documents to classify. default:3", type=int, default=3)
+    parser.add_argument('--limit', help="Specify a number of documents to classify. default:5", type=int, default=5)
     parser.add_argument('--topics', help="Specify a lookup topic file.")
     args = parser.parse_args()
 
