@@ -56,9 +56,9 @@ class MongoReader(Reader):
         self.conn = pymongo.MongoClient(mongoURI)[dbName][collName]
         self.query = query
         self.limit = limit
-        self.fields = ['components', 'question', 'answers']
+        self.fields = ['title', 'components', 'question', 'answers']
         self.key_field = 'components'
-        self.return_fields = ['question', 'answers']
+        self.return_fields = ['title', 'question', 'answers']
 
     def get_value(self, value):
         if isinstance(value, list):

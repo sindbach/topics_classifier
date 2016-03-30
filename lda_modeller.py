@@ -34,8 +34,8 @@ class CustomCorpus(object):
 class BuildLDAModel(object):
     ''' Build LDA model file. 
     '''
-    def __init__(self, fileoutput, num_topics=40, num_passes=20, 
-                 num_min_docs=3, num_min_pct=20, num_topic_words=10):
+    def __init__(self, fileoutput, num_topics=40, num_passes=15, 
+                 num_min_docs=3, num_min_pct=70, num_topic_words=15):
         ''' init
             :param fileoutput: output model file 
             :param num_topics: number of topics to be generated

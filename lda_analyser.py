@@ -25,8 +25,8 @@ class LDAAnalyser(object):
         self.lda_model = lda_model
         self.topic_file = topic_file
         self.reader = reader
-        # Only analyse the question
-        self.reader.return_fields = ['question']
+        # Only analyse title and question, as there is no answer yet. 
+        self.reader.return_fields = ['title', 'question']
 
     def analyse(self):
         ''' analyse '''
@@ -47,7 +47,8 @@ class LDAAnalyser(object):
             _logger.info("Most related %s", most_related)
             key = str(most_related[0])
             if lookup:
-                _logger.info("Topic title is: %s", lookup[key].get('topic'))
+                _logger.info("Topic's title is: %s", lookup[key].get('topic'))
+                _logger.info("Stats: %s" % lookup[key].get('stats'))
         return 
 
 
