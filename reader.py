@@ -6,8 +6,7 @@ import logging
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem import WordNetLemmatizer
-from nltk.stem.porter import PorterStemmer
-
+from nltk.stem.snowball import SnowballStemmer
 
 logging.basicConfig(format='%(levelname)s : %(message)s', level=logging.INFO)
 logging.root.level = logging.INFO
@@ -17,9 +16,10 @@ class Reader(object):
     ''' Source reader object feeds other objects to iterate through a source. '''
     def __init__(self):
         ''' init '''
-        self.stop = set(stopwords.words('english'))
+        exclude_stops = set(('.', '(', ')'))
+        self.stop = set(stopwords.words('english')) - exclude_stops
         self.tokenizer = RegexpTokenizer(r'\w+')
-        self.p_stemmer = PorterStemmer()
+        self.p_stemmer = SnowballStemmer('english')
         self.wn_lemmatizer = WordNetLemmatizer()
 
     def prepare_words(self, text):
