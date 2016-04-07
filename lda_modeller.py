@@ -34,8 +34,8 @@ class CustomCorpus(object):
 class BuildLDAModel(object):
     ''' Build LDA model file. 
     '''
-    def __init__(self, fileoutput, num_topics=40, num_passes=15, 
-                 num_min_docs=3, num_min_pct=70, num_topic_words=15):
+    def __init__(self, fileoutput, num_topics=30, num_passes=10, 
+                 num_min_docs=5, num_min_pct=75, num_topic_words=10):
         ''' init
             :param fileoutput: output model file 
             :param num_topics: number of topics to be generated
@@ -107,13 +107,21 @@ if __name__ == "__main__":
     parser.add_argument('--limit', help="Specify the limit of records to read from source. default: None", type=int, default=None)
     parser.add_argument('--topics', help="Specify a file to print topics to")
     parser.add_argument('--nobuild', help="Flag to skip building a model. Useful to just dumping topics", action="store_true", default=False)
+
+    parser.add_argument('--numtopics', help="Specify number of topics to generate", type=int, default=20)
+    parser.add_argument('--numpasses', help="Specify number of passes/iteration", type=int, default=10)
+    parser.add_argument('--mindocs', help="Specify the minimum number of documents that a word occured in to be ignored", type=int, default=2)
+    parser.add_argument('--minpct', help="Specify the minimum percentage threshold for words to be accounted in", type=int, default=70)
+    parser.add_argument('--numwordstopics', help="Specify the number of words per topic to generate", type=int, default=10)
+
     args = parser.parse_args()
 
     if (not args.model) or (args.topics and not args.model):
         parser.print_help()
         sys.exit(0)
 
-    builder = BuildLDAModel(fileoutput=args.model)
+    builder = BuildLDAModel(fileoutput=args.model, num_topics=args.numtopics, num_passes=args.numpasses, 
+                            num_min_docs=args.mindocs, num_min_pct=args.minpct, num_topic_words=args.numwordstopics)
     if not args.nobuild:
         reader = MongoReader(query=args.query, mongoURI=args.mongoURI, 
                              dbName=args.db, collName=args.coll, limit=args.limit)
