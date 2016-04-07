@@ -18,7 +18,7 @@ The document structure in MongoDB is structured like below:
 
 ```json
 {
-    "title" : "foo bar baz"
+    "title" : "foo bar baz",
     "question": "foo baz ?",
     "components": [ "foo", "bar", .. ],
     "questions": [ "foo", "bar", .. ]
