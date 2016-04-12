@@ -52,3 +52,14 @@ lda_analyser.py --db topicsDB --coll data --limit 1 --topics ./topics.json --mod
 
 The command above will read 1 document in MongoDB (running locally on `localhost:27017`) in database 'topicsDB' and collection 'data'. It will use the model file `example.model` to classify words and use the lookup file `topics.json` to translate the topics id to a useful title. 
 
+**Docker Environment** 
+
+The easiest way to start the development environment is by using docker-compose. Go to the docker directory, and type: 
+
+```
+docker-compose run topics
+```
+
+Which should run a docker environment with the code in `/home/ubuntu`. You can access MongoDB 3.2 from hostname `mongodb` port 27107. 
+
+
