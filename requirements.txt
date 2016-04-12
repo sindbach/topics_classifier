@@ -1,6 +1,0 @@
-numpy
-scipy
-nltk
-pymongo
-gensim
-
